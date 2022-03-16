@@ -26,7 +26,7 @@
 |___/\___/_/   \__/\___/_/     
 
 
-Timeverter helps you to bruteforce several kinds of tokens and to convert several time domains.
+Timeverter helps you to bruteforce several kinds of time-based tokens and to convert several time domains.
 
 syntax: timeverter.py [-d DATE] [-e EPOCH] [-h]
 
