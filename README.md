@@ -30,10 +30,8 @@
 
 TimeVerter helps you to bruteforce several kinds of time-based tokens and to convert several time domains.
 
-syntax: timeverter.py [-d DATE] [-e EPOCH] [-h]
-
 date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]
-epoch format: [seconds]
+epoch format: [seconds] (divide or multiply for changing the magnitude)
 
 optional arguments:
 
