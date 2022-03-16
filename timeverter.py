@@ -18,7 +18,7 @@ def help():
    banner = zlib.decompress(base64.b64decode(encoded_data), 16 + zlib.MAX_WBITS).decode('utf-8')
    print(banner)
    print("TimeVerter helps you to bruteforce several kinds of time-based tokens and to convert several time domains.\n")
-   print("syntax: timeverter.py [-d DATE] [-e EPOCH] [-h]\n")
+   
    print("date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]")
    print("epoch format: [seconds]\n")
 
