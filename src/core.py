@@ -129,7 +129,7 @@ def main():
         print("Date time:  "+verter.epoch_to_date(args.epoch))
 
     if args.url:
-        if args.method:
+        if args.request:
             token_request(args)
         else:
             print("Error! Please specify a HTTP method [GET or POST]")
