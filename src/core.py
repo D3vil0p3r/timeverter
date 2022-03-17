@@ -108,6 +108,9 @@ def main():
     if args.colored:
         print(colors.fg.random)
 
+    if args.version:
+        printer.print_version()
+
     if args.help:
         printer.help()
 
