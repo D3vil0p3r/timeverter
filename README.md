@@ -53,7 +53,7 @@ List of arguments:
 -U, --utc TIME              show current UTC+N time as epoch and date format\
 -x, --method METHOD         specify the HTTP method [default:GET]
 
-Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-e` arguments for specifying the Time Base of your attack.
+Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-e` option for specifying the Time Base of your attack.
 
 Usage examples:\
 python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274\
