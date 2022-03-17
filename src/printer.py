@@ -30,6 +30,7 @@ def help():
    print("-s, --suffix <PATTERN>        specify a suffix string after the timestamp")
    print("-u, --url <URL>               specify the URL")
    print("-U, --utc <TIME>              show current UTC+N time as epoch and date format")
+   print("-v, --version                 show version information")
    print("-x, --method <METHOD>         specify the HTTP method [default:GET]")
    print("\n")
    print("Use VERTER string on the parameter to bruteforce. Choose -n, -U or -e option for specifying the Time Base of your attack.")
@@ -44,6 +45,10 @@ def print_banner():
     encoded_data = "H4sIAAAAAAAAA11RW47DIAz85xTzR5Aas7S7bbc5xF4AyRwkh68fQJM1ssEzFhgPoMZuOFmwmFnphZPyVqPBOeS+BGniVU6o4UR9llTl4FdmdY/qlQc1zNr5IEzRkEYTpEhrBMoVbaVGo6FLRCl+Lmg0mskoX6Nl4IrqxLbNJ3LfXy9j9h2/wCr25/hNoOAF+G/b5s/UiucB/pZ3e1+1ER4d/sElzt9GkvaZ78zyHYrzy8uiMCuc0kQ5pcnPScRVBzGPAewTPE7z0FXYsZs8XUs2DXhmxpuopqfS5iNTfsipm6s4Mr1fq0xSxVFPmfDhDQApq7V0AgAA"
     banner = zlib.decompress(base64.b64decode(encoded_data), 16 + zlib.MAX_WBITS).decode('utf-8')
     print(banner)
+
+def print_version():
+    print_banner()
+    print("TimeVerter v1.2.0")
 
 def print_settings(args):
     print_banner()
