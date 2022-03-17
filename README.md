@@ -56,6 +56,6 @@ optional arguments:
 Usage examples:\
 python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274\
 python timeverter.py --utc=-3:30\
-python timeverter.py -U +0:00 -r 3000 -g md5 -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr "Wrong token" -mul 1000 -p admin
+python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr "Wrong token" -mul 1000 -p admin
 
 ![timeverter_compressed](https://user-images.githubusercontent.com/83867734/158685463-03612c7d-a3ec-4ad1-8236-8d47df7cd657.gif)
