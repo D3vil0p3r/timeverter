@@ -39,7 +39,7 @@ python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274
 python timeverter.py --utc=-3:30
 python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr "Wrong token" -mul 1000 -p admin
 ```
-![timeverter_compressed](https://user-images.githubusercontent.com/83867734/158685463-03612c7d-a3ec-4ad1-8236-8d47df7cd657.gif)
+![timeverter_compressed](https://user-images.githubusercontent.com/83867734/158840889-ceae7b4d-6e46-4a02-9957-fd3fa4f1c40b.gif)
 
 # Testing
 For testing it, you can set up a PHP server on your testing machine (i.e. `php -S 127.0.0.1:8000`), by using the following example PHP scripts (credits [HackTheBox](https://www.hackthebox.com/)):
