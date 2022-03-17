@@ -7,6 +7,8 @@ import requests
 import hashlib
 from urllib.parse import urlparse # python2: from urlparse import urlparse
 import http.client # python2: httplib
+from sys import stdout
+import re
 
 ############################################################
 # Help                                                     #
@@ -28,7 +30,7 @@ def help():
    print("-D DATE, --date DATE        convert a date to epoch time format")
    print("-div N, --divide N          divide the timestamp by the specified value (used for change the order of magnitude)")
    print("-e EPOCH, --epoch EPOCH     convert epoch time to date format")
-   print("-f, --float                 deal timestamp as floating point number")
+   print("-f, --float N               deal timestamp as floating point number and specify the floating step value when range option is set")
    print("-fr, --filterregex PATTERN  filter the response for the submitted regex")
    print("-g, --algorithm             specify the algorithm to be used for token computation")
    print("-h, --help                  show this help message and exit")
@@ -40,11 +42,12 @@ def help():
    print("-s, --suffix PATTERN        specify a suffix string after the timestamp")
    print("-u, --url URL               specify the url")
    print("-U, --utc TIME              show current UTC+N time as epoch and date format")
+   print("-x, --method METHOD         specify the HTTP method [default:GET]")
    print("\n")
    print("Usage examples:")
    print("python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274")
    print("python timeverter.py --utc=-3:30")
-   print("python timeverter.py -U +0:00 -r 3000 -g md5 -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
+   print("python timeverter.py -U +0:00 -r 3000 -g md5 -u http://SERVER_IP:PORT/somefolder/ -x POST -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
 
 class ParseKwargs(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -65,6 +68,43 @@ def check_url(url):
     return True
   else:
     return False
+
+
+def print_settings(args):
+    print("________________________________________________")
+    print("")
+    if args.method:
+        print("[*] Method           : %s" % args.method)
+    if args.url:
+        print("[*] URL              : %s" % args.url)
+    if args.now:
+        tb = "Current local time"
+    elif args.utc:
+        tb = ''.join(["UTC",args.utc])
+    elif args.date:
+        tb = ''.join(["Epoch Time: ",str(args.date),";Date Time: ",epoch_to_date(args.date)])
+    if args.now or args.utc or args.date:
+        print("[*] Time Base        : %s" % tb)
+    if args.algorithm:
+        print("[*] Algorithm        : %s" % args.algorithm)
+    if args.prefix:
+        print("[*] Prefix           : %s" % args.prefix)
+    if args.suffix:
+        print("[*] Suffix           : %s" % args.suffix)
+    if args.matchregex:
+        print("[*] Matcher          : regexp -> %s" % args.matchregex)
+    if args.filterregex:
+        print("[*] Filter           : regexp -> %s" % args.filterregex)
+    if args.range:
+        print("[*] Range            : %s" % args.range)
+    if args.divide:
+        print("[*] Divide Factor    : %d" % args.divide)
+    if args.multiply:
+        print("[*] Multiply Factor  : %d" % args.multiply)
+    if args.float:
+        print("[*] Float Step value : %f" % args.float)
+    print("________________________________________________")
+    print("")
 
 #NOTE: utcfromtimestamp(0) starts at 1970-01-01 00:00:00; fromtimestamp(0) starts at 1970-01-01 XX:00:00 where XX depends on your local time, so be careful.
 
@@ -104,113 +144,142 @@ def epoch_to_date(epoch):
     date_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(epoch))
     return date_time
 
-def define_time():
-    if args.now:
+def define_time(now_time,utc_time,date_time,mul,div):
+    if now_time:
         ts = current_local_epoch()
-    elif args.utc:
+    elif utc_time:
         ts = current_utc_epoch(args.utc)
-    elif args.date:
+    elif date_time:
         ts = date_to_epoch(args.date)
     else:
         print("Error! Time parameter not defined")
         exit()
 
-    if args.multiply:
-        ts *= args.multiply #(i.e. *1000 = milliseconds)
-    elif args.divide:
-        ts /= args.divide
+    if mul:
+        ts *= mul #(i.e. *1000 = milliseconds)
+    elif div:
+        ts /= div
 
     return ts
 
-def compute_token(ts):
-    if not args.algorithm:
+def compute_token(alg,ts,prefix,suffix):
+    if not alg:
         print ("Error! Specify an algorithm.")
         exit()
-
-    prefix = args.prefix
-    suffix = args.suffix
-    algo = args.algorithm
-    if algo == "md5":
+    
+    if alg == "md5":
         token = hashlib.md5((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif algo == "sha1":
+    elif alg == "sha1":
         token = hashlib.sha1((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif algo == "sha224":
+    elif alg == "sha224":
         token = hashlib.sha224((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif algo == "sha256":
+    elif alg == "sha256":
         token = hashlib.sha256((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif algo == "sha384":
+    elif alg == "sha384":
         token = hashlib.sha384((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif algo == "sha512":
+    elif alg == "sha512":
         token = hashlib.sha512((prefix + str(ts) + suffix).encode()).hexdigest()
     #### can also add OpenSSL algo...
     return token
 
-def token_request():
+def token_request(args):
+    print_settings(args)
+    
+    prefix_str = args.prefix
+    suffix_str = args.suffix
+    now_time = args.now
+    utc_time = args.utc
+    date_time = args.date
+    mul = args.multiply
+    div = args.divide
+    flt = args.float
+    alg = args.algorithm
+    matchregex = args.matchregex
+    filterregex = args.filterregex
+
     key_token_param_index = "VERTER"
     url = args.url
     if not check_url(url):
         print("Error. Target URL is not responsing.")
         exit()
-    if args.data: #POST
-        if not args.float: ##float option must be fixed
-            rng = args.range
-            ts = int(define_time())
-        else:
-            rng = float(args.range)
-            ts = define_time()
-        for dt in range(ts - rng, ts + rng):
-            data = args.data
-            hashed_token = compute_token(dt)
+    
+    if not flt:
+        rng = args.range
+        inc = 1
+        ts = int(define_time(now_time,utc_time,date_time,mul,div))
+    else:
+        rng = float(args.range)
+        inc = flt
+        ts = define_time(now_time,utc_time,date_time,mul,div)
 
-            data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
-            key_token_param_index = hashed_token
-            #print(data)
-            print("checking {} {}".format(str(dt), hashed_token))
-            # send the request
+    dt = ts - rng
+    while dt <= ts + rng:
+        hashed_token = compute_token(alg,dt,prefix_str,suffix_str)
+        data = args.data
+        data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
+        key_token_param_index = hashed_token
+        stdout.write("\r[*] checking {} {}".format(str(dt), hashed_token))
+        stdout.flush()
+
+        if args.method == "POST":
+            # send POST request
             res = requests.post(url, data=data)
-            # response text check
-            if (args.filterregex and not args.filterregex in res.text) or (args.matchregex and args.matchregex in res.text):
-                print(res.text)
-                print("[*] Congratulations! raw reply printed before")
-                print("Time is: "+str(dt))
-                exit()
+        elif args.method == "GET":
+            # send GET request
+            res = requests.get(url, params=data)
 
-parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument("-d", "--data", help="insert data for POST request", nargs='*', action=ParseKwargs)
-parser.add_argument("-D", "--date", help="convert a date to epoch time format")
-parser.add_argument("-div", "--divide", type=int, help="divide the timestamp by the specified value (used for change the order of magnitude)")
-parser.add_argument("-e", "--epoch", type=int, help="convert epoch time to date format")
-parser.add_argument("-f", "--float", action='store_true', help="deal timestamp as floating point number")
-parser.add_argument("-fr", "--filterregex", help="filter the response for the submitted regex")
-parser.add_argument("-g", "--algorithm", choices=["md5", "sha1", "sha224", "sha256", "sha384", "sha512"], help="specify the algorithm to be used for token computation")
-parser.add_argument("-h", "--help", action='store_true', help="show this help message and exit")
-parser.add_argument("-mr", "--matchregex", help="match the response for the submitted regex")
-parser.add_argument("-mul", "--multiply", type=int, help="multiply the timestamp by the specified value (used for change the order of magnitude)")
-parser.add_argument("-n", "--now", action='store_true', help="show current local time as epoch and date format")
-parser.add_argument("-p", "--prefix", default="", help="specify a prefix string before the timestamp")
-parser.add_argument("-r", "--range", type=int, default=0, help="specify a +- offset value of the timestamp in seconds (or other magnitudes according -div and -mul options)")
-parser.add_argument("-s", "--suffix", default="", help="specify a suffix string after the timestamp")
-parser.add_argument("-u", "--url", help="specify the url")
-parser.add_argument("-U", "--utc", choices=["-12:00", "-11:00", "-10:00", "-9:30", "-9:00", "-8:00", "-7:00", "-6:00", "-5:00", "-4:00", "-3:30", "-3:00", "-2:00", "-1:00", "-0:00", "+0:00", "+1:00", "+2:00", "+3:00", "+3:30", "+4:00", "+4:30", "+5:00", "+5:30", "+5:45", "+6:00", "+6:30", "+7:00", "+8:00", "+8:45", "+9:00", "+9:30", "+10:00", "+10:30", "+11:00", "+12:00", "+12:45", "+13:00", "+14:00"], help="show current UTC+N time as epoch and date format")
+        # response text check        
+        if (filterregex and not re.compile(args.filterregex).search(res.text)) or (matchregex and re.compile(args.matchregex).search(res.text)):
+            print(res.text)
+            print("[*] Congratulations! Target response printed above")
+            print("Time is: "+str(dt))
+            exit()
+        dt += inc
 
-args = parser.parse_args()
+def arg_parse():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("-d", "--data", help="insert params for GET or POST request", nargs='*', action=ParseKwargs)
+    parser.add_argument("-D", "--date", help="convert a date to epoch time format")
+    parser.add_argument("-div", "--divide", type=int, help="divide the timestamp by the specified value (used for change the order of magnitude)")
+    parser.add_argument("-e", "--epoch", type=int, help="convert epoch time to date format")
+    parser.add_argument("-f", "--float", type=float, help="deal timestamp as floating point number and specify the floating step value when range option is set")
+    parser.add_argument("-fr", "--filterregex", help="filter the response for the submitted regex")
+    parser.add_argument("-g", "--algorithm", choices=["md5", "sha1", "sha224", "sha256", "sha384", "sha512"], help="specify the algorithm to be used for token computation")
+    parser.add_argument("-h", "--help", action='store_true', help="show this help message and exit")
+    parser.add_argument("-mr", "--matchregex", help="match the response for the submitted regex")
+    parser.add_argument("-mul", "--multiply", type=int, help="multiply the timestamp by the specified value (used for change the order of magnitude)")
+    parser.add_argument("-n", "--now", action='store_true', help="show current local time as epoch and date format")
+    parser.add_argument("-p", "--prefix", default="", help="specify a prefix string before the timestamp")
+    parser.add_argument("-r", "--range", type=int, default=0, help="specify a +- offset value of the timestamp in seconds (or other magnitudes according -div and -mul options)")
+    parser.add_argument("-s", "--suffix", default="", help="specify a suffix string after the timestamp")
+    parser.add_argument("-u", "--url", help="specify the url")
+    parser.add_argument("-U", "--utc", choices=["-12:00", "-11:00", "-10:00", "-9:30", "-9:00", "-8:00", "-7:00", "-6:00", "-5:00", "-4:00", "-3:30", "-3:00", "-2:00", "-1:00", "-0:00", "+0:00", "+1:00", "+2:00", "+3:00", "+3:30", "+4:00", "+4:30", "+5:00", "+5:30", "+5:45", "+6:00", "+6:30", "+7:00", "+8:00", "+8:45", "+9:00", "+9:30", "+10:00", "+10:30", "+11:00", "+12:00", "+12:45", "+13:00", "+14:00"], help="show current UTC+N time as epoch and date format")
+    parser.add_argument("-x", "--method", default="GET", choices=["GET", "POST"], help="specify the HTTP method [default:GET]")
 
-if args.help:
-    help()
+    args = parser.parse_args()
+    return args
 
-if args.now and not args.algorithm:
-    print("Date time  [local time]: "+str(current_local_date()))
-    print("Epoch time [local time]: "+str(current_local_epoch())) #The output is a little skewed because the two functions are called in two different times
+def main():
+    args = arg_parse()
+    if args.help:
+        help()
 
-if args.utc and not args.algorithm:
-    print("Date time  [UTC%s]: " % args.utc +str(current_utc_date(args.utc)))
-    print("Epoch time [UTC%s]: " % args.utc +str(current_utc_epoch(args.utc)))
+    if args.now and not args.algorithm:
+        print("Date time  [local time]: "+str(current_local_date()))
+        print("Epoch time [local time]: "+str(current_local_epoch())) #The output is a little skewed because the two functions are called in two different times
 
-if args.date and not args.algorithm:
-    print("Epoch time: "+str(date_to_epoch(args.date)))
+    if args.utc and not args.algorithm:
+        print("Date time  [UTC%s]: " % args.utc +str(current_utc_date(args.utc)))
+        print("Epoch time [UTC%s]: " % args.utc +str(current_utc_epoch(args.utc)))
 
-if args.epoch and not args.algorithm:
-    print("Date time:  "+epoch_to_date(args.epoch))
+    if args.date and not args.algorithm:
+        print("Epoch time: "+str(date_to_epoch(args.date)))
 
-if args.url:
-    token_request()
+    if args.epoch and not args.algorithm:
+        print("Date time:  "+epoch_to_date(args.epoch))
+
+    if args.url:
+        token_request(args)
+
+if __name__ == "__main__":
+    main()
