@@ -33,7 +33,7 @@ TimeVerter helps you to bruteforce several kinds of time-based tokens and to con
 date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]
 epoch format: [seconds] (divide or multiply for changing the magnitude)
 
-optional arguments:
+List of arguments:
 
 -d DATA, --data DATA        insert data for POST request (i.e. userid=user token=VERTER)\
 -D DATE, --date DATE        convert a date to epoch time format\
