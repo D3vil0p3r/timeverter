@@ -1,5 +1,5 @@
 
-# TimeVerter
+# TimeVerter - Time Converter Token Bruteforcer
 
 ```
       _______              
