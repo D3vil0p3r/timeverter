@@ -39,7 +39,7 @@ List of arguments:
 -D DATE, --date DATE        convert a date to epoch time format\
 -div N, --divide N          divide the timestamp by the specified value (used for change the order of magnitude)\
 -e EPOCH, --epoch EPOCH     convert epoch time to date format\
--f, --float                 deal timestamp as floating point number\
+-f, --float N               deal timestamp as floating point number\
 -fr, --filterregex PATTERN  filter the response for the submitted regex\
 -g, --algorithm             specify the algorithm to be used for token computation\
 -h, --help                  show this help message and exit\
@@ -50,9 +50,10 @@ List of arguments:
 -r, --range N               specify a +- offset value of the timestamp in seconds (or other magnitudes according -div and -mul options)\
 -s, --suffix PATTERN        specify a suffix string after the timestamp\
 -u, --url URL               specify the url\
--U, --utc TIME              show current UTC+N time as epoch and date format
+-U, --utc TIME              show current UTC+N time as epoch and date format\
+-x, --method METHOD         specify the HTTP method [default:GET]
 
-Use `VERTER` string on the param to bruteforce.
+Use `VERTER` string on the parameter to bruteforce.
 
 Usage examples:\
 python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274\
