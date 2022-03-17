@@ -26,7 +26,7 @@ List of arguments:
 | `-p` | `--prefix` | admin | Specify a prefix string before the timestamp |
 | `-r` | `--range` | 3000 | Specify a +- offset value of the timestamp in seconds (or other magnitudes according `-div` and `-mul` options) |
 | `-s` | `--suffix` | root | Specify a suffix string after the timestamp |
-| `-u` | `--url` | http://x.x.x.x:XXXX | Specify the url |
+| `-u` | `--url` | http://x.x.x.x:XXXX | Specify the URL |
 | `-U` | `--utc` | +1:00 | Show current UTC+N time as epoch and date format |
 | `-x` | `--method` | POST | Specify the HTTP method [default:GET] |
 
