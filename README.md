@@ -28,6 +28,7 @@ List of arguments:
 | `-s` | `--suffix` | root | Specify a suffix string after the timestamp |
 | `-u` | `--url` | http://x.x.x.x:XXXX | Specify the URL |
 | `-U` | `--utc` | +1:00 | Show current UTC+N time as epoch and date format |
+| `-v` | `--version` | | Show version information |
 | `-x` | `--method` | POST | Specify the HTTP method [default:GET] |
 
 Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-e` option for specifying the Time Base of your attack.
