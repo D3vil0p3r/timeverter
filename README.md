@@ -35,6 +35,7 @@ epoch format: [seconds] (divide or multiply for changing the magnitude)
 
 List of arguments:
 
+-c, --colored               let's give some random colored output
 -d DATA, --data DATA        insert data for POST request (i.e. userid=user token=VERTER)\
 -D DATE, --date DATE        convert a date to epoch time format\
 -div N, --divide N          divide the timestamp by the specified value (used for change the order of magnitude)\
