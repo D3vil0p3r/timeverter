@@ -10,7 +10,7 @@ def arg_parse():
     parser.add_argument("-e", "--epoch", type=int, help="convert epoch time to date format")
     parser.add_argument("-f", "--float", type=float, help="deal timestamp as floating point number and specify the floating step value when range option is set")
     parser.add_argument("-fr", "--filterregex", help="filter the response for the submitted regex")
-    parser.add_argument("-g", "--algorithm", choices=["md5", "sha1", "sha224", "sha256", "sha384", "sha512"], help="specify the algorithm to be used for token computation")
+    parser.add_argument("-g", "--algorithm", help="specify the algorithm to be used for token computation (look for hashlib or OpenSSL algorithms)")
     parser.add_argument("-h", "--help", action='store_true', help="show this help message and exit")
     parser.add_argument("-mr", "--matchregex", help="match the response for the submitted regex")
     parser.add_argument("-mul", "--multiply", type=int, help="multiply the timestamp by the specified value (used for change the order of magnitude)")

@@ -31,20 +31,11 @@ def compute_token(alg,ts,prefix,suffix):
     if not alg:
         print ("Error! Specify an algorithm.")
         exit()
-    
-    if alg == "md5":
-        token = hashlib.md5((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif alg == "sha1":
-        token = hashlib.sha1((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif alg == "sha224":
-        token = hashlib.sha224((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif alg == "sha256":
-        token = hashlib.sha256((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif alg == "sha384":
-        token = hashlib.sha384((prefix + str(ts) + suffix).encode()).hexdigest()
-    elif alg == "sha512":
-        token = hashlib.sha512((prefix + str(ts) + suffix).encode()).hexdigest()
-    #### can also add OpenSSL algo...
+    else:
+        h = hashlib.new(alg)
+        h.update(''.join([prefix, str(ts), suffix]).encode('utf-8'))
+        token = h.hexdigest()
+
     return token
 
 def token_request(args):

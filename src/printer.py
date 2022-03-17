@@ -20,7 +20,7 @@ def help():
    print("-e, --epoch <seconds>         convert epoch time to date format")
    print("-f, --float <N>               deal timestamp as floating point number and specify the floating step value when range option is set")
    print("-fr, --filterregex <pattern>  filter the response for the submitted regex")
-   print("-g, --algorithm <algorithm>   specify the algorithm to be used for token computation")
+   print("-g, --algorithm <algorithm>   specify the algorithm to be used for token computation (look for hashlib or OpenSSL algorithms)")
    print("-h, --help                    show this help message and exit")
    print("-mr, --matchregex <pattern>   match the response for the submitted regex")
    print("-mul, --multiply <N>          multiply the timestamp by the specified value (used for change the order of magnitude)")
