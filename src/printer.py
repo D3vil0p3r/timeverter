@@ -54,8 +54,8 @@ def print_settings(args):
     print_banner()
     print("________________________________________________")
     print("")
-    if args.method:
-        print("[*] Method                : %s" % args.method)
+    if args.request:
+        print("[*] Method                : %s" % args.request)
     if args.url:
         print("[*] URL                   : %s" % args.url)
     if args.data:
