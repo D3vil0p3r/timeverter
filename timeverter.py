@@ -24,7 +24,7 @@ def help():
    print("date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]")
    print("epoch format: [seconds]\n")
 
-   print("optional arguments:\n")
+   print("List of arguments:\n")
    
    print("-d DATA, --data DATA        insert data for POST request (i.e. userid=user token=VERTER)")
    print("-D DATE, --date DATE        convert a date to epoch time format")
