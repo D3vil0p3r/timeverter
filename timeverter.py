@@ -47,7 +47,7 @@ def help():
    print("Usage examples:")
    print("python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274")
    print("python timeverter.py --utc=-3:30")
-   print("python timeverter.py -U +0:00 -r 3000 -g md5 -u http://SERVER_IP:PORT/somefolder/ -x POST -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
+   print("python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
 
 class ParseKwargs(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
