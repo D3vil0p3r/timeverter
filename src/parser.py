@@ -21,7 +21,7 @@ def arg_parse():
     parser.add_argument("-u", "--url", help="specify the url")
     parser.add_argument("-U", "--utc", choices=["-12:00", "-11:00", "-10:00", "-9:30", "-9:00", "-8:00", "-7:00", "-6:00", "-5:00", "-4:00", "-3:30", "-3:00", "-2:00", "-1:00", "-0:00", "+0:00", "+1:00", "+2:00", "+3:00", "+3:30", "+4:00", "+4:30", "+5:00", "+5:30", "+5:45", "+6:00", "+6:30", "+7:00", "+8:00", "+8:45", "+9:00", "+9:30", "+10:00", "+10:30", "+11:00", "+12:00", "+12:45", "+13:00", "+14:00"], help="show current UTC+N time as epoch and date format")
     parser.add_argument("-v", "--version", action='store_true', help="show version information")
-    parser.add_argument("-x", "--method", default="GET", choices=["GET", "POST"], help="specify the HTTP method [default:GET]")
+    parser.add_argument("-X", "--request", choices=["GET", "POST"], help="specify request method to use")
 
     args = parser.parse_args()
     return args
