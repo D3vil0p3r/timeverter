@@ -87,10 +87,10 @@ def token_request(args):
         stdout.write("\r[*] checking {} {}".format(str(dt), hashed_token))
         stdout.flush()
 
-        if args.method == "POST":
+        if args.request == "POST":
             # send POST request
             res = requests.post(url, data=data)
-        elif args.method == "GET":
+        elif args.request == "GET":
             # send GET request
             res = requests.get(url, params=data)
 
