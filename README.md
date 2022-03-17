@@ -6,28 +6,29 @@
 **TimeVerter** helps you to bruteforce several kinds of time-based tokens and to convert several time domains.
 
 date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]\
-epoch format: [seconds] (divide or multiply for changing the magnitude)
+epoch format: [seconds]
 
 List of arguments:
-
-`-c`, `--colored`               let's give some random colored output\
-`-d`, `--data <DATA>`        insert data for POST request (i.e. userid=user token=VERTER)\
-`-D`, `--date <DATE>`        convert a date to epoch time format\
-`-div`, `--divide <N>`          divide the timestamp by the specified value (used for change the order of magnitude)\
-`-e`, `--epoch <EPOCH>`     convert epoch time to date format\
-`-f`, `--float <N>`               deal timestamp as floating point number\
-`-fr`, `--filterregex <PATTERN>`  filter the response for the submitted regex\
-`-g`, `--algorithm <ALG>`             specify the algorithm to be used for token computation\
-`-h`, `--help`                  show this help message and exit\
-`-mr`, `--matchregex <PATTERN>`   match the response for the submitted regex\
-`-mul`, `--multiply <N>`          multiply the timestamp by the specified value (used for change the order of magnitude)\
-`-n`, `--now`                   show current local time as epoch and date format\
-`-p`, `--prefix <PATTERN>`        specify a prefix string before the timestamp\
-`-r`, `--range <N>`               specify a +- offset value of the timestamp in seconds (or other magnitudes according -div and -mul options)\
-`-s`, `--suffix <PATTERN>`        specify a suffix string after the timestamp\
-`-u`, `--url <URL>`               specify the url\
-`-U`, `--utc <TIME>`              show current UTC+N time as epoch and date format\
-`-x`, `--method <METHOD>`         specify the HTTP method [default:GET]
+| Argument | Long Argument | Input Example | Description |
+| -------- | ------------- | ---------- | ----------- |
+| `-c` | `--colored` | | Let's give some random colored output |
+| `-d` | `--data` | param1=value param2=VERTER | Insert data for POST request (i.e. userid=user token=VERTER) |
+| `-D` | `--date` | 2022-03-26T01:13:37 | Convert a date to epoch time format |
+| `-div` | `--divide` | 1000 | Divide the timestamp by the specified value (used for change the order of magnitude) |
+| `-e` | `--epoch` | 1647135274.789 | Convert epoch time to date format |
+| `-f` | `--float` | 0.001 | Deal timestamp as floating point number and specify the floating step value when range option is set |
+| `-fr` | `--filterregex` | Wrong token | Filter the response for the submitted regex |
+| `-g` | `--algorithm` | sha256 | Specify the algorithm to be used for token computation |
+| `-h` | `--help` | | Show this help message and exit |
+| `-mr` | `--matchregex` | .\*Great.\* | Match the response for the submitted regex |
+| `-mul` | `--multiply` | 1000 | Multiply the timestamp by the specified value (used for change the order of magnitude) |
+| `-n` | `--now` | | Show current local time as epoch and date format |
+| `-p` | `--prefix` | admin | Specify a prefix string before the timestamp |
+| `-r` | `--range` | 3000 | Specify a +- offset value of the timestamp in seconds (or other magnitudes according `-div` and `-mul` options) |
+| `-s` | `--suffix` | root | Specify a suffix string after the timestamp |
+| `-u` | `--url` | http://x.x.x.x:XXXX | Specify the url |
+| `-U` | `--utc` | +1:00 | Show current UTC+N time as epoch and date format |
+| `-x` | `--method` | POST | Specify the HTTP method [default:GET] |
 
 Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-e` option for specifying the Time Base of your attack.
 
