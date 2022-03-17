@@ -28,7 +28,7 @@ def help():
    print("-p, --prefix <PATTERN>        specify a prefix string before the timestamp")
    print("-r, --range <N>               specify a +- offset value of the timestamp in seconds (or other magnitudes according -div and -mul options)")
    print("-s, --suffix <PATTERN>        specify a suffix string after the timestamp")
-   print("-u, --url <URL>               specify the url")
+   print("-u, --url <URL>               specify the URL")
    print("-U, --utc <TIME>              show current UTC+N time as epoch and date format")
    print("-x, --method <METHOD>         specify the HTTP method [default:GET]")
    print("\n")
