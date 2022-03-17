@@ -18,7 +18,7 @@ List of arguments:
 | `-e` | `--epoch` | 1647135274.789 | Convert epoch time to date format |
 | `-f` | `--float` | 0.001 | Deal timestamp as floating point number and specify the floating step value when range option is set |
 | `-fr` | `--filterregex` | Wrong token | Filter the response for the submitted regex |
-| `-g` | `--algorithm` | sha256 | Specify the algorithm to be used for token computation |
+| `-g` | `--algorithm` | sha256 | Specify the algorithm to be used for token computation (look for hashlib or OpenSSL algorithms) |
 | `-h` | `--help` | | Show this help message and exit |
 | `-mr` | `--matchregex` | .\*Great.\* | Match the response for the submitted regex |
 | `-mul` | `--multiply` | 1000 | Multiply the timestamp by the specified value (used for change the order of magnitude) |
