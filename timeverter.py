@@ -44,6 +44,8 @@ def help():
    print("-U, --utc TIME              show current UTC+N time as epoch and date format")
    print("-x, --method METHOD         specify the HTTP method [default:GET]")
    print("\n")
+   print("Use VERTER string on the parameter to bruteforce.")
+   print("\n")
    print("Usage examples:")
    print("python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274")
    print("python timeverter.py --utc=-3:30")
