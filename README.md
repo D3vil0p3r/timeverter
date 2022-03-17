@@ -29,7 +29,7 @@ List of arguments:
 | `-u` | `--url` | http://x.x.x.x:XXXX | Specify the URL |
 | `-U` | `--utc` | +1:00 | Show current UTC+N time as epoch and date format |
 | `-v` | `--version` | | Show version information |
-| `-x` | `--method` | POST | Specify the HTTP method [default:GET] |
+| `-X` | `--request` | POST | Specify request method to use |
 
 Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-e` option for specifying the Time Base of your attack.
 
