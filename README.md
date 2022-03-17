@@ -1,7 +1,7 @@
 
 # TimeVerter - Time Converter Token Bruteforcer
 
-![timeverter_screen](https://user-images.githubusercontent.com/83867734/158734739-f620450e-e302-4108-b73d-68ec9e36d577.png)
+![timeverter_screen](https://user-images.githubusercontent.com/83867734/158734970-7aa3ba3d-047d-4229-9201-6180b3b95a51.png)
 
 **TimeVerter** helps you to bruteforce several kinds of time-based tokens and to convert several time domains.
 
