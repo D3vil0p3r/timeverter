@@ -9,16 +9,14 @@ from urllib.parse import urlparse # python2: from urlparse import urlparse
 import http.client # python2: httplib
 from sys import stdout
 import re
+import random
 
 ############################################################
 # Help                                                     #
 ############################################################
 def help():
    # Display Help
-   #cat banner.txt | gzip | base64
-   encoded_data = "H4sIAAAAAAAAA11RW47DIAz85xTzR5Aas7S7bbc5xF4AyRwkh68fQJM1ssEzFhgPoMZuOFmwmFnphZPyVqPBOeS+BGniVU6o4UR9llTl4FdmdY/qlQc1zNr5IEzRkEYTpEhrBMoVbaVGo6FLRCl+Lmg0mskoX6Nl4IrqxLbNJ3LfXy9j9h2/wCr25/hNoOAF+G/b5s/UiucB/pZ3e1+1ER4d/sElzt9GkvaZ78zyHYrzy8uiMCuc0kQ5pcnPScRVBzGPAewTPE7z0FXYsZs8XUs2DXhmxpuopqfS5iNTfsipm6s4Mr1fq0xSxVFPmfDhDQApq7V0AgAA"
-   banner = zlib.decompress(base64.b64decode(encoded_data), 16 + zlib.MAX_WBITS).decode('utf-8')
-   print(banner)
+   print_banner()
    print("TimeVerter helps you to bruteforce several kinds of time-based tokens and to convert several time domains.\n")
    
    print("date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]")
@@ -26,6 +24,7 @@ def help():
 
    print("List of arguments:\n")
    
+   print("-c, --colored               let's give some random colored output")
    print("-d DATA, --data DATA        insert data for POST request (i.e. userid=user token=VERTER)")
    print("-D DATE, --date DATE        convert a date to epoch time format")
    print("-div N, --divide N          divide the timestamp by the specified value (used for change the order of magnitude)")
@@ -44,12 +43,54 @@ def help():
    print("-U, --utc TIME              show current UTC+N time as epoch and date format")
    print("-x, --method METHOD         specify the HTTP method [default:GET]")
    print("\n")
-   print("Use VERTER string on the parameter to bruteforce.")
+   print("Use VERTER string on the parameter to bruteforce. Choose -n, -U or -e option for specifying the Time Base of your attack.")
    print("\n")
    print("Usage examples:")
    print("python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274")
    print("python timeverter.py --utc=-3:30")
    print("python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
+
+class colors:
+    '''Colors class:reset all colors with colors.reset; two
+    sub classes fg for foreground
+    and bg for background; use as colors.subclass.colorname.
+    i.e. colors.fg.red or colors.bg.greenalso, the generic bold, disable,
+    underline, reverse, strike through,
+    and invisible work with the main class i.e. colors.bold'''
+    reset='\033[0m'
+    bold='\033[01m'
+    disable='\033[02m'
+    underline='\033[04m'
+    reverse='\033[07m'
+    strikethrough='\033[09m'
+    invisible='\033[08m'
+    class fg:
+        black='\033[30m'
+        red='\033[31m'
+        green='\033[32m'
+        orange='\033[33m'
+        blue='\033[34m'
+        purple='\033[35m'
+        cyan='\033[36m'
+        lightgrey='\033[37m'
+        darkgrey='\033[90m'
+        lightred='\033[91m'
+        lightgreen='\033[92m'
+        yellow='\033[93m'
+        lightblue='\033[94m'
+        pink='\033[95m'
+        lightcyan='\033[96m'
+        random='\033['+random.choice(['0','33','92','93','94','96'])+'m'
+    class bg:
+        black='\033[40m'
+        red='\033[41m'
+        green='\033[42m'
+        orange='\033[43m'
+        blue='\033[44m'
+        purple='\033[45m'
+        cyan='\033[46m'
+        lightgrey='\033[47m'
+
 
 class ParseKwargs(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -71,22 +112,36 @@ def check_url(url):
   else:
     return False
 
+def print_banner():
+    #cat banner.txt | gzip | base64
+    encoded_data = "H4sIAAAAAAAAA11RW47DIAz85xTzR5Aas7S7bbc5xF4AyRwkh68fQJM1ssEzFhgPoMZuOFmwmFnphZPyVqPBOeS+BGniVU6o4UR9llTl4FdmdY/qlQc1zNr5IEzRkEYTpEhrBMoVbaVGo6FLRCl+Lmg0mskoX6Nl4IrqxLbNJ3LfXy9j9h2/wCr25/hNoOAF+G/b5s/UiucB/pZ3e1+1ER4d/sElzt9GkvaZ78zyHYrzy8uiMCuc0kQ5pcnPScRVBzGPAewTPE7z0FXYsZs8XUs2DXhmxpuopqfS5iNTfsipm6s4Mr1fq0xSxVFPmfDhDQApq7V0AgAA"
+    banner = zlib.decompress(base64.b64decode(encoded_data), 16 + zlib.MAX_WBITS).decode('utf-8')
+    print(banner)
 
 def print_settings(args):
+    print_banner()
     print("________________________________________________")
     print("")
     if args.method:
         print("[*] Method           : %s" % args.method)
     if args.url:
         print("[*] URL              : %s" % args.url)
+    if args.data:
+        print("[*] Parameters       : %s" % args.data)
     if args.now:
-        tb = "Current local time"
+        tb = "Current Local Time"
     elif args.utc:
-        tb = ''.join(["UTC",args.utc])
-    elif args.date:
-        tb = ''.join(["Epoch Time: ",str(args.date),";Date Time: ",epoch_to_date(args.date)])
-    if args.now or args.utc or args.date:
+        tb = ''.join(["Current UTC",args.utc," Time"])
+    elif args.epoch:
+        tb = ''.join(["Epoch Time: ",str(args.epoch),"; Date Time: ",epoch_to_date(args.epoch)])
+    if args.now or args.utc or args.epoch:
         print("[*] Time Base        : %s" % tb)
+    if args.range:
+        print("[*] Time Range       : %s" % args.range)
+    if args.multiply:
+        print("[*] Time Multiply Factor  : %d" % args.multiply)
+    if args.divide:
+        print("[*] Time Divide Factor    : %d" % args.divide)
     if args.algorithm:
         print("[*] Algorithm        : %s" % args.algorithm)
     if args.prefix:
@@ -97,12 +152,6 @@ def print_settings(args):
         print("[*] Matcher          : regexp -> %s" % args.matchregex)
     if args.filterregex:
         print("[*] Filter           : regexp -> %s" % args.filterregex)
-    if args.range:
-        print("[*] Range            : %s" % args.range)
-    if args.divide:
-        print("[*] Divide Factor    : %d" % args.divide)
-    if args.multiply:
-        print("[*] Multiply Factor  : %d" % args.multiply)
     if args.float:
         print("[*] Float Step value : %f" % args.float)
     print("________________________________________________")
@@ -146,13 +195,13 @@ def epoch_to_date(epoch):
     date_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(epoch))
     return date_time
 
-def define_time(now_time,utc_time,date_time,mul,div):
+def define_time(now_time,utc_time,epoch_time,mul,div):
     if now_time:
         ts = current_local_epoch()
     elif utc_time:
-        ts = current_utc_epoch(args.utc)
-    elif date_time:
-        ts = date_to_epoch(args.date)
+        ts = current_utc_epoch(utc_time)
+    elif epoch_time:
+        ts = epoch_time
     else:
         print("Error! Time parameter not defined")
         exit()
@@ -192,6 +241,7 @@ def token_request(args):
     now_time = args.now
     utc_time = args.utc
     date_time = args.date
+    epoch_time = args.epoch
     mul = args.multiply
     div = args.divide
     flt = args.float
@@ -208,11 +258,11 @@ def token_request(args):
     if not flt:
         rng = args.range
         inc = 1
-        ts = int(define_time(now_time,utc_time,date_time,mul,div))
+        ts = int(define_time(now_time,utc_time,epoch_time,mul,div))
     else:
         rng = float(args.range)
         inc = flt
-        ts = define_time(now_time,utc_time,date_time,mul,div)
+        ts = define_time(now_time,utc_time,epoch_time,mul,div)
 
     dt = ts - rng
     while dt <= ts + rng:
@@ -240,6 +290,7 @@ def token_request(args):
 
 def arg_parse():
     parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("-c", "--colored", action='store_true', help="let's give some random colored output")
     parser.add_argument("-d", "--data", help="insert params for GET or POST request", nargs='*', action=ParseKwargs)
     parser.add_argument("-D", "--date", help="convert a date to epoch time format")
     parser.add_argument("-div", "--divide", type=int, help="divide the timestamp by the specified value (used for change the order of magnitude)")
@@ -263,6 +314,10 @@ def arg_parse():
 
 def main():
     args = arg_parse()
+
+    if args.colored:
+        print(colors.fg.random)
+
     if args.help:
         help()
 
