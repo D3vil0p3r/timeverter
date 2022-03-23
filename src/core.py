@@ -30,13 +30,16 @@ def define_time(now_time,utc_time,epoch_time,mul,div):
 
 def encode_chain(enc,str_in,prefix,suffix):
     enc_list = enc.split(",")
-    str_res = str_in
+    str_input = str_in
+    str_pref = prefix
+    str_suff = suffix
+    str_res = ''.join([str_pref, str_input, str_suff])
     for x in enc_list:
         if x == "base64" or x == "b64":
-            str_bytes = ''.join([prefix, str_res, suffix]).encode("ascii")
+            str_bytes = str_res.encode("ascii")
             str_res = base64.b64encode(str_bytes).decode("ascii")
         elif x == "hex" or x == "hexadecimal":
-            str_res = ''.join([prefix, str_res, suffix]).encode("utf-8").hex()
+            str_res = str_res.encode("utf-8").hex()
         #Add other encodings...
     return str_res
 
