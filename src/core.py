@@ -36,7 +36,7 @@ def encode_chain(enc,str_in,prefix,suffix):
             str_bytes = ''.join([prefix, str_res, suffix]).encode("ascii")
             str_res = base64.b64encode(str_bytes).decode("ascii")
         elif x == "hex" or x == "hexadecimal":
-            str_res = str_res.encode("utf-8").hex()
+            str_res = ''.join([prefix, str_res, suffix]).encode("utf-8").hex()
         #Add other encodings...
     return str_res
 
