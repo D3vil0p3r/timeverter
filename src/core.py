@@ -96,16 +96,21 @@ def token_request(args):
     
     data = args.data
     
+    #Check if headers and data contain VERTER string
+    check_headers = [y for x, y in headers.items() if key_token_param_index in y]
+    check_data = [y for x, y in data.items() if key_token_param_index in y]
+
     dt = ts - rng
     while dt <= ts + rng:
         hashed_token = compute_token(alg,enc,dt,prefix_str,suffix_str)
         
-        if args.header:
+        if args.header and check_headers:
             head_value = [y for x, y in headers.items() if key_token_param_index in y][0]
             start_value = head_value.replace(key_token_param_index,'') #Manage case where VERTER is a substring (i.e., Cookie: SESSIONID=VERTER)
             headers[list(headers.keys())[list(headers.values()).index(head_value)]] = start_value + hashed_token
         
-        if args.data:
+        
+        if args.data and check_data:
             data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
         key_token_param_index = hashed_token
         stdout.write("\r[*] checking {} {}".format(str(dt), hashed_token))
@@ -122,6 +127,7 @@ def token_request(args):
             print("\n".join("{}: {}".format(k, v) for k, v in res.request.headers.items()))
             print("\n")
             print(res.request.body)
+            print("\n")
         # response text check        
         if (filterregex and not re.compile(args.filterregex).search(res.text)) or (matchregex and re.compile(args.matchregex).search(res.text)):
             print(res.text)
