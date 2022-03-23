@@ -93,12 +93,13 @@ def token_request(args):
         for header in args.header:
             name, _, value = header.partition(': ')
             headers[name] = value
+        #Check if headers contain VERTER string
+        check_headers = [y for x, y in headers.items() if key_token_param_index in y]
     
-    data = args.data
-    
-    #Check if headers and data contain VERTER string
-    check_headers = [y for x, y in headers.items() if key_token_param_index in y]
-    check_data = [y for x, y in data.items() if key_token_param_index in y]
+    if args.data:
+        data = args.data
+        #Check if data contains VERTER string
+        check_data = [y for x, y in data.items() if key_token_param_index in y]
 
     dt = ts - rng
     while dt <= ts + rng:
