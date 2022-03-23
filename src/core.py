@@ -96,6 +96,7 @@ def token_request(args):
         #Check if headers contain VERTER string
         check_headers = [y for x, y in headers.items() if key_token_param_index in y]
     
+    data = {}
     if args.data:
         data = args.data
         #Check if data contains VERTER string
