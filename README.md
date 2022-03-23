@@ -1,5 +1,3 @@
-<meta name="google-site-verification" content="eYOBomaN2YcylvNwoLtX2_8lz_6SnfKqLRidvk5Rrdo" />
-
 # TimeVerter - Time Converter Token Bruteforcer
 
 ![timeverter_screen](https://user-images.githubusercontent.com/83867734/158734970-7aa3ba3d-047d-4229-9201-6180b3b95a51.png)
