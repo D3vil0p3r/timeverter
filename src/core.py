@@ -28,12 +28,12 @@ def define_time(now_time,utc_time,epoch_time,mul,div):
 
     return ts
 
-def encode_chain(enc,str_in):
+def encode_chain(enc,str_in,prefix,suffix):
     enc_list = enc.split(",")
     str_res = str_in
     for x in enc_list:
         if x == "base64" or x == "b64":
-            str_bytes = str_res.encode("ascii")
+            str_bytes = ''.join([prefix, str_res, suffix]).encode("ascii")
             str_res = base64.b64encode(str_bytes).decode("ascii")
         elif x == "hex" or x == "hexadecimal":
             str_res = str_res.encode("utf-8").hex()
@@ -47,7 +47,7 @@ def compute_token(alg,enc,ts,prefix,suffix):
         exit()
     else:
         if enc:
-            token = encode_chain(enc,token)
+            token = encode_chain(enc,token,prefix,suffix)
         if alg:
             h = hashlib.new(alg)
             h.update(''.join([prefix, token, suffix]).encode('utf-8'))
