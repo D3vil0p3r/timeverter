@@ -1,5 +1,6 @@
 import requests
 import hashlib
+import base64
 from .parser import arg_parse
 from .util import colors
 from .util import check_url
@@ -27,14 +28,30 @@ def define_time(now_time,utc_time,epoch_time,mul,div):
 
     return ts
 
-def compute_token(alg,ts,prefix,suffix):
-    if not alg:
-        print ("Error! Specify an algorithm.")
+def encode_chain(enc,str_in):
+    enc_list = enc.split(",")
+    str_res = str_in
+    for x in enc_list:
+        if x == "base64" or x == "b64":
+            str_bytes = str_res.encode("ascii")
+            str_res = base64.b64encode(str_bytes).decode("ascii")
+        elif x == "hex" or x == "hexadecimal":
+            str_res = str_res.encode("utf-8").hex()
+        #Add other encodings...
+    return str_res
+
+def compute_token(alg,enc,ts,prefix,suffix):
+    token = str(ts)
+    if not alg and not enc:
+        print ("Error! Specify an algorithm or an encoding format.")
         exit()
     else:
-        h = hashlib.new(alg)
-        h.update(''.join([prefix, str(ts), suffix]).encode('utf-8'))
-        token = h.hexdigest()
+        if enc:
+            token = encode_chain(enc,token)
+        if alg:
+            h = hashlib.new(alg)
+            h.update(''.join([prefix, token, suffix]).encode('utf-8'))
+            token = h.hexdigest()
 
     return token
 
@@ -51,6 +68,7 @@ def token_request(args):
     div = args.divide
     flt = args.float
     alg = args.algorithm
+    enc = args.encode
     matchregex = args.matchregex
     filterregex = args.filterregex
 
@@ -71,7 +89,7 @@ def token_request(args):
 
     dt = ts - rng
     while dt <= ts + rng:
-        hashed_token = compute_token(alg,dt,prefix_str,suffix_str)
+        hashed_token = compute_token(alg,enc,dt,prefix_str,suffix_str)
         data = args.data
         data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
         key_token_param_index = hashed_token

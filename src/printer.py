@@ -17,7 +17,8 @@ def help():
    print("-d, --data <data>             insert data for POST request (i.e. userid=user token=VERTER)")
    print("-D, --date <date>             convert a date to epoch time format")
    print("-div, --divide <N>            divide the timestamp by the specified value (used for change the order of magnitude)")
-   print("-e, --epoch <seconds>         convert epoch time to date format")
+   print("-e, --encode <pattern>        encode the input to a chain of the specified formats. It will be applied before the --algorithm option")
+   print("-E, --epoch <seconds>         convert epoch time to date format")
    print("-f, --float <N>               deal timestamp as floating point number and specify the floating step value when range option is set")
    print("-fr, --filterregex <pattern>  filter the response for the submitted regex")
    print("-g, --algorithm <algorithm>   specify the algorithm to be used for token computation (look for hashlib or OpenSSL algorithms)")
@@ -33,10 +34,10 @@ def help():
    print("-v, --version                 show version information")
    print("-X, --request <method>        specify request method to use")
    print("\n")
-   print("Use VERTER string on the parameter to bruteforce. Choose -n, -U or -e option for specifying the Time Base of your attack.")
+   print("Use VERTER string on the parameter to bruteforce. Choose -n, -U or -E option for specifying the Time Base of your attack.")
    print("\n")
    print("Usage examples:")
-   print("python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274")
+   print("python timeverter.py -d 2022-03-26T01:13:37 -E 1647135274")
    print("python timeverter.py --utc=-3:30")
    print("python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
 
@@ -74,6 +75,8 @@ def print_settings(args):
         print("[*] Time Multiply Factor  : %d" % args.multiply)
     if args.divide:
         print("[*] Time Divide Factor    : %d" % args.divide)
+    if args.encode:
+        print("[*] Encoding              : %s" % args.encode)
     if args.algorithm:
         print("[*] Algorithm             : %s" % args.algorithm)
     if args.prefix:

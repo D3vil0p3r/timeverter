@@ -15,7 +15,8 @@ List of arguments:
 | `-d` | `--data` | param1=value param2=VERTER | Insert data for POST request (i.e. userid=user token=VERTER) |
 | `-D` | `--date` | 2022-03-26T01:13:37 | Convert a date to epoch time format |
 | `-div` | `--divide` | 1000 | Divide the timestamp by the specified value (used for change the order of magnitude) |
-| `-e` | `--epoch` | 1647135274.789 | Convert epoch time to date format |
+| `-e` | `--encode` | base64,hex | Encode the input to a chain of the specified formats. It will be applied before the `--algorithm` option |
+| `-E` | `--epoch` | 1647135274.789 | Convert epoch time to date format |
 | `-f` | `--float` | 0.001 | Deal timestamp as floating point number and specify the floating step value when range option is set |
 | `-fr` | `--filterregex` | Wrong token | Filter the response for the submitted regex |
 | `-g` | `--algorithm` | sha256 | Specify the algorithm to be used for token computation (look for hashlib or OpenSSL algorithms) |
@@ -31,11 +32,11 @@ List of arguments:
 | `-v` | `--version` | | Show version information |
 | `-X` | `--request` | POST | Specify request method to use |
 
-Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-e` option for specifying the Time Base of your attack.
+Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-E` option for specifying the Time Base of your attack.
 
 Usage examples:
 ```
-python timeverter.py -d 2022-03-26T01:13:37 -e 1647135274
+python timeverter.py -d 2022-03-26T01:13:37 -E 1647135274
 python timeverter.py --utc=-3:30
 python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr "Wrong token" -mul 1000 -p admin
 ```
