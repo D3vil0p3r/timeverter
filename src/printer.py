@@ -23,6 +23,7 @@ def help():
    print("-fr, --filterregex <pattern>  filter the response for the submitted regex")
    print("-g, --algorithm <algorithm>   specify the algorithm to be used for token computation (look for hashlib or OpenSSL algorithms)")
    print("-h, --help                    show this help message and exit")
+   print("-H, --header                  specify the headers of the request")
    print("-mr, --matchregex <pattern>   match the response for the submitted regex")
    print("-mul, --multiply <N>          multiply the timestamp by the specified value (used for change the order of magnitude)")
    print("-n, --now                     show current local time as epoch and date format")
@@ -31,7 +32,8 @@ def help():
    print("-s, --suffix <pattern>        specify a suffix string after the timestamp")
    print("-u, --url <URL>               specify the URL")
    print("-U, --utc <time>              show current UTC+N time as epoch and date format")
-   print("-v, --version                 show version information")
+   print("-v, --verbose                 show verbose output")
+   print("-V, --version                 show version information")
    print("-X, --request <method>        specify request method to use")
    print("\n")
    print("Use VERTER string on the parameter to bruteforce. Choose -n, -U or -E option for specifying the Time Base of your attack.")
@@ -40,6 +42,7 @@ def help():
    print("python timeverter.py -d 2022-03-26T01:13:37 -E 1647135274")
    print("python timeverter.py --utc=-3:30")
    print("python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
+   print("python timeverter.py -u 'http://SERVER_IP:PORT/somefolder/' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.5' -H 'Connection: keep-alive' -H 'Cookie: SESSIONID=VERTER' -H 'Upgrade-Insecure-Requests: 1' -H 'Cache-Control: max-age=0' -n -e b64,hex -v -X GET -r 1000")
 
 def print_banner():
     #cat banner.txt | gzip | base64

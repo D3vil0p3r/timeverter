@@ -87,22 +87,41 @@ def token_request(args):
         inc = flt
         ts = define_time(now_time,utc_time,epoch_time,mul,div)
 
+    headers = {}
+    # Extract headers
+    for header in args.header:
+        name, _, value = header.partition(': ')
+        headers[name] = value
+    
+    
+    data = args.data
+    
     dt = ts - rng
     while dt <= ts + rng:
         hashed_token = compute_token(alg,enc,dt,prefix_str,suffix_str)
-        data = args.data
-        data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
+        
+        if args.header:
+            head_value = [y for x, y in headers.items() if key_token_param_index in y][0]
+            start_value = head_value.replace(key_token_param_index,'') #Manage case where VERTER is a substring (i.e., Cookie: SESSIONID=VERTER)
+            headers[list(headers.keys())[list(headers.values()).index(head_value)]] = start_value + hashed_token
+        
+        if args.data:
+            data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
         key_token_param_index = hashed_token
         stdout.write("\r[*] checking {} {}".format(str(dt), hashed_token))
         stdout.flush()
 
         if args.request == "POST":
             # send POST request
-            res = requests.post(url, data=data)
+            res = requests.post(url, data=data, headers=headers)
         elif args.request == "GET":
             # send GET request
-            res = requests.get(url, params=data)
-
+            res = requests.get(url, params=data, headers=headers)
+        if args.verbose:    
+            print("\n")
+            print("\n".join("{}: {}".format(k, v) for k, v in res.request.headers.items()))
+            print("\n")
+            print(res.request.body)
         # response text check        
         if (filterregex and not re.compile(args.filterregex).search(res.text)) or (matchregex and re.compile(args.matchregex).search(res.text)):
             print(res.text)
