@@ -88,11 +88,11 @@ def token_request(args):
         ts = define_time(now_time,utc_time,epoch_time,mul,div)
 
     headers = {}
-    # Extract headers
-    for header in args.header:
-        name, _, value = header.partition(': ')
-        headers[name] = value
-    
+    if args.header:
+        # Extract headers
+        for header in args.header:
+            name, _, value = header.partition(': ')
+            headers[name] = value
     
     data = args.data
     
