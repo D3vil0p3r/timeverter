@@ -1,4 +1,5 @@
 import base64, zlib
+import src.time as verter
 
 ############################################################
 # Help                                                     #
@@ -71,7 +72,7 @@ def print_settings(args):
     elif args.utc:
         tb = ''.join(["Current UTC",args.utc," Time"])
     elif args.epoch:
-        tb = ''.join(["Epoch Time: ",str(args.epoch),"; Date Time: ",epoch_to_date(args.epoch)])
+        tb = ''.join(["Epoch Time: ",str(args.epoch),"; Date Time: ",verter.epoch_to_date(args.epoch)])
     if args.now or args.utc or args.epoch:
         print("[*] Time Base             : %s" % tb)
     if args.range:
