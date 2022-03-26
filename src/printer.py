@@ -5,7 +5,7 @@ import base64, zlib
 ############################################################
 def help():
    # Display Help
-   print_banner()
+   print_version()
    print("TimeVerter helps you to bruteforce several kinds of time-based tokens and to convert several time domains.\n")
    
    print("date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]")
@@ -35,6 +35,7 @@ def help():
    print("-v, --verbose                 show verbose output")
    print("-V, --version                 show version information")
    print("-X, --request <method>        specify request method to use")
+   print("-z, --compare <pattern>       compare a value to the output tokens")
    print("\n")
    print("Use VERTER string on the parameter to bruteforce. Choose -n, -U or -E option for specifying the Time Base of your attack.")
    print("\n")
@@ -52,10 +53,10 @@ def print_banner():
 
 def print_version():
     print_banner()
-    print("TimeVerter v1.2.0")
+    print("TimeVerter v1.3.0")
 
 def print_settings(args):
-    print_banner()
+    print_version()
     print("________________________________________________")
     print("")
     if args.request:
@@ -92,5 +93,7 @@ def print_settings(args):
         print("[*] Filter                : regexp -> %s" % args.filterregex)
     if args.float:
         print("[*] Float Step value      : %f" % args.float)
+    if args.compare:
+        print("[*] Comparing String      : %s" % args.compare)
     print("________________________________________________")
     print("")
