@@ -36,7 +36,7 @@ List of arguments:
 
 Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-E` option for specifying the Time Base of your attack.
 
-Usage examples:
+Usage Examples:
 ```
 python timeverter.py -D 2022-03-26T01:13:37
 python timeverter.py --utc=-3:30
