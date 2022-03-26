@@ -74,12 +74,10 @@ def token_request(args):
     enc = args.encode
     matchregex = args.matchregex
     filterregex = args.filterregex
+    url = args.url
+    cmp_str = args.compare
 
     key_token_param_index = "VERTER"
-    url = args.url
-    if not check_url(url):
-        print("Error. Target URL is not responsing.")
-        exit()
     
     if not flt:
         rng = args.range
@@ -108,37 +106,51 @@ def token_request(args):
     dt = ts - rng
     while dt <= ts + rng:
         hashed_token = compute_token(alg,enc,dt,prefix_str,suffix_str)
-        
-        if args.header and check_headers:
-            head_value = [y for x, y in headers.items() if key_token_param_index in y][0]
-            start_value = head_value.replace(key_token_param_index,'') #Manage case where VERTER is a substring (i.e., Cookie: SESSIONID=VERTER)
-            headers[list(headers.keys())[list(headers.values()).index(head_value)]] = start_value + hashed_token
-        
-        
-        if args.data and check_data:
-            data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
-        key_token_param_index = hashed_token
-        stdout.write("\r[*] checking {} {}".format(str(dt), hashed_token))
-        stdout.flush()
+        if args.url:
+            if not check_url(url):
+                print("Error. Target URL is not responsing.")
+                exit()
 
-        if args.request == "POST":
-            # send POST request
-            res = requests.post(url, data=data, headers=headers)
-        elif args.request == "GET":
-            # send GET request
-            res = requests.get(url, params=data, headers=headers)
-        if args.verbose:    
-            print("\n")
-            print("\n".join("{}: {}".format(k, v) for k, v in res.request.headers.items()))
-            print("\n")
-            print(res.request.body)
-            print("\n")
-        # response text check        
-        if (filterregex and not re.compile(args.filterregex).search(res.text)) or (matchregex and re.compile(args.matchregex).search(res.text)):
-            print(res.text)
-            print("[*] Congratulations! Target response printed above")
-            print("Time is: "+str(dt))
-            exit()
+            if args.header and check_headers:
+                head_value = [y for x, y in headers.items() if key_token_param_index in y][0]
+                start_value = head_value.replace(key_token_param_index,'') #Manage case where VERTER is a substring (i.e., Cookie: SESSIONID=VERTER)
+                headers[list(headers.keys())[list(headers.values()).index(head_value)]] = start_value + hashed_token
+            
+            
+            if args.data and check_data:
+                data[list(data.keys())[list(data.values()).index(key_token_param_index)]] = hashed_token #'token' must be dynamic. Leave 'token' for testing purpose
+            key_token_param_index = hashed_token
+            stdout.write("\r[*] checking {} {}".format(str(dt), hashed_token))
+            stdout.flush()
+    
+            if args.request == "POST":
+                # send POST request
+                res = requests.post(url, data=data, headers=headers)
+            elif args.request == "GET":
+                # send GET request
+                res = requests.get(url, params=data, headers=headers)
+            else:
+                print("Error! Please specify a HTTP method [GET or POST]")
+
+            if args.verbose:    
+                print("\n")
+                print("\n".join("{}: {}".format(k, v) for k, v in res.request.headers.items()))
+                print("\n")
+                print(res.request.body)
+                print("\n")
+            # response text check        
+            if (filterregex and not re.compile(args.filterregex).search(res.text)) or (matchregex and re.compile(args.matchregex).search(res.text)):
+                print(res.text)
+                print("[*] Congratulations! Target response printed above")
+                print("Time is: "+str(dt))
+                exit()
+        else:
+            stdout.write("\r[*] checking {} {}".format(str(dt), hashed_token))
+            stdout.flush()
+            if (cmp_str == hashed_token):
+                print("[*] Congratulations! Match found!")
+                print("Time is: "+str(dt))
+                exit()
         dt += inc
 
 def main():
@@ -167,8 +179,4 @@ def main():
     if args.epoch and not args.algorithm:
         print("Date time:  "+verter.epoch_to_date(args.epoch))
 
-    if args.url:
-        if args.request:
-            token_request(args)
-        else:
-            print("Error! Please specify a HTTP method [GET or POST]")
+    token_request(args)
