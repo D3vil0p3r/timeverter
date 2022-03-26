@@ -161,9 +161,11 @@ def main():
 
     if args.version:
         printer.print_version()
+        exit()
 
     if args.help:
         printer.help()
+        exit()
 
     if args.now and not args.algorithm:
         print("Date time  [local time]: "+str(verter.current_local_date()))
