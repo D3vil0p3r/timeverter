@@ -40,7 +40,7 @@ def help():
    print("\n")
    print("Use VERTER string on the parameter to bruteforce. Choose -n, -U or -E option for specifying the Time Base of your attack.")
    print("\n")
-   print("Usage examples:")
+   print("Usage Examples:")
    print("python timeverter.py -D 2022-03-26T01:13:37")
    print("python timeverter.py --utc=-3:30")
    print("python timeverter.py -n -g md5 -r 3000 -z a4e11f213f0bc314a043207dba6ca8ca")
