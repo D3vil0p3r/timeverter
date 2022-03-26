@@ -25,6 +25,7 @@ def arg_parse():
     parser.add_argument("-v", "--verbose", action='store_true', help="show verbose output")
     parser.add_argument("-V", "--version", action='store_true', help="show version information")
     parser.add_argument("-X", "--request", choices=["GET", "POST"], help="specify request method to use")
+    parser.add_argument("-z", "--compare", help="compare a value to the output tokens")
 
     args = parser.parse_args()
     return args
