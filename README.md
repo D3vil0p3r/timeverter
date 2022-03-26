@@ -32,7 +32,7 @@ List of arguments:
 | `-v` | `--verbose` | | Show verbose output |
 | `-V` | `--version` | | Show version information |
 | `-X` | `--request` | POST | Specify request method to use |
-| `-z` | `--compare` | a4e11f213f0bc314a043207dba6ca8ca | compare a value to the output tokens |
+| `-z` | `--compare` | a4e11f213f0bc314a043207dba6ca8ca | Compare a value to the output tokens |
 
 Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-E` option for specifying the Time Base of your attack.
 
