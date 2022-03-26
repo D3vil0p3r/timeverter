@@ -42,6 +42,7 @@ def help():
    print("Usage examples:")
    print("python timeverter.py -d 2022-03-26T01:13:37 -E 1647135274")
    print("python timeverter.py --utc=-3:30")
+   print("python timeverter.py -n -g md5 -r 3000 -z a4e11f213f0bc314a043207dba6ca8ca")
    print("python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr \"Wrong token\" -mul 1000 -p admin")
    print("python timeverter.py -u 'http://SERVER_IP:PORT/somefolder/' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.5' -H 'Connection: keep-alive' -H 'Cookie: SESSIONID=VERTER' -H 'Upgrade-Insecure-Requests: 1' -H 'Cache-Control: max-age=0' -n -e b64,hex -v -X GET -r 1000")
 
