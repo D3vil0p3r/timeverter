@@ -4,7 +4,7 @@
 
 **TimeVerter** helps you to bruteforce several kinds of time-based tokens and to convert several time domains.
 
-date format: [%YYYY-%mm-%ddT%HH-%MM-%SS]\
+date format: [%YYYY-%mm-%ddT%HH:%MM:%SS]\
 epoch format: [seconds]
 
 List of arguments:
@@ -38,7 +38,7 @@ Use `VERTER` string on the parameter to bruteforce. Choose `-n`, `-U` or `-E` op
 
 Usage examples:
 ```
-python timeverter.py -d 2022-03-26T01:13:37 -E 1647135274
+python timeverter.py -D 2022-03-26T01:13:37
 python timeverter.py --utc=-3:30
 python timeverter.py -n -g md5 -r 3000 -z a4e11f213f0bc314a043207dba6ca8ca
 python timeverter.py -U +0:00 -r 3000 -g md5 -x POST -u http://SERVER_IP:PORT/somefolder/ -d submit=check token=VERTER -fr "Wrong token" -mul 1000 -p admin
