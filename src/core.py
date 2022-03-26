@@ -167,21 +167,21 @@ def main():
         printer.help()
         exit()
 
-    if args.now and not args.algorithm:
+    if args.now and ( not args.algorithm and not args.compare and not args.url ):
         print("Date time  [local time]: "+str(verter.current_local_date()))
         print("Epoch time [local time]: "+str(verter.current_local_epoch())) #The output is a little skewed because the two functions are called in two different times
         exit()
 
-    if args.utc and not args.algorithm:
+    if args.utc and ( not args.algorithm and not args.compare and not args.url ):
         print("Date time  [UTC%s]: " % args.utc +str(verter.current_utc_date(args.utc)))
         print("Epoch time [UTC%s]: " % args.utc +str(verter.current_utc_epoch(args.utc)))
         exit()
 
-    if args.date and not args.algorithm:
+    if args.date and ( not args.algorithm and not args.compare and not args.url ):
         print("Epoch time: "+str(verter.date_to_epoch(args.date)))
         exit()
 
-    if args.epoch and not args.algorithm:
+    if args.epoch and ( not args.algorithm and not args.compare and not args.url ):
         print("Date time:  "+verter.epoch_to_date(args.epoch))
         exit()
 
