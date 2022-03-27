@@ -1,10 +1,10 @@
 import argparse
-from src.util import ParseKwargs
+from src.util import ParseDataArgs
 
 def arg_parse():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("-c", "--colored", action='store_true', help="let's give some random colored output")
-    parser.add_argument("-d", "--data", help="insert params for GET or POST request", nargs='*', action=ParseKwargs)
+    parser.add_argument("-d", "--data", help="insert params for GET or POST request", action=ParseDataArgs)
     parser.add_argument("-D", "--date", help="convert a date to epoch time format")
     parser.add_argument("-div", "--divide", type=int, help="divide the timestamp by the specified value (used for change the order of magnitude)")
     parser.add_argument("-e", "--encode", help="encode the input to a chain of the specified formats. It will be applied before the --algorithm option")
