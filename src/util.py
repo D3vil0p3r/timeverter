@@ -51,6 +51,13 @@ class ParseKwargs(argparse.Action):
             key, value = value.split('=')
             getattr(namespace, self.dest)[key] = value
 
+class ParseDataArgs(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, dict())
+        d = dict(x.split("=") for x in values.split("&"))
+        for key, value in d.items():
+            getattr(namespace, self.dest)[key] = value
+
 def check_url(url):
   urlp = urlparse(url)
   conn = http.client.HTTPConnection(urlp.netloc)
